@@ -1,37 +1,19 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.16)
-project(KohotLibrary VERSION 0.1.0 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.2)
+project(KohotQtApp VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 
-add_library(KOHOT_LIB  
-src/base_collection.cpp
-src/group.cpp
-src/groups_collection.cpp  
-src/json_utils.cpp  
-src/kohot.cpp  
-src/player.cpp  
-src/players_collection.cpp  
-src/players_sorter.cpp  
-src/team.cpp  
-src/teams_creator.cpp  
-src/utility_functions.cpp  
-include/base_collection.hpp  
-include/console_colors.hpp  
-include/group.hpp  
-include/groups_collection.hpp  
-include/json_utils.hpp  
-include/kohot.hpp  
-include/player.hpp  
-include/players_collection.hpp  
-include/players_sorter.hpp  
-include/team.hpp  
-include/teams_creator.hpp  
-include/utility_functions.hpp
+include(FetchContent)
+set(DEPS_LIBRARY KohotLibrary)
+FetchContent_Declare(
+	${DEPS_LIBRARY}
+	GIT_REPOSITORY https://github.com/EladGil47/${DEPS_LIBRARY}.git
+	GIT_TAG only_lib
+    SOURCE_DIR ${PROJECT_SOURCE_DIR}/_deps/${DEPS_LIBRARY}
+    BINARY_DIR ${PROJECT_SOURCE_DIR}/build/_deps/${DEPS_LIBRARY}
 )
-message("Found library:" ${CMAKE_CURRENT_SOURCE_DIR})
+FetchContent_MakeAvailable(${DEPS_LIBRARY})
 
-target_include_directories(KOHOT_LIB PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
+set(POJECT_EXECUTABLE_NAME ConsoleAppKohot)
 
 set(CONSOLE_APP_KOHOT_LIB_SOURCES
 main.cpp
@@ -47,12 +29,18 @@ include/menu.hpp
 include/players_menu.hpp  
 include/user_interaction.hpp  
 )
-add_executable(ConsoleAppKohot ${CONSOLE_APP_KOHOT_LIB_SOURCES})
+add_executable(${POJECT_EXECUTABLE_NAME} ${CONSOLE_APP_KOHOT_LIB_SOURCES})
 
-target_include_directories(ConsoleAppKohot PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+link_directories(${CMAKE_SOURCE_DIR}/${DEPS_LIBRARY})
+
+target_compile_options(${POJECT_EXECUTABLE_NAME} PRIVATE
+		-Wall
+		)
+
+target_link_libraries(${POJECT_EXECUTABLE_NAME} PRIVATE
+    KOHOT_LIB
 )
 
-target_link_libraries(ConsoleAppKohot PRIVATE
-KOHOT_LIB
+target_include_directories(${POJECT_EXECUTABLE_NAME} PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
