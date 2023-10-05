@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.2)
-project(KohotQtApp VERSION 0.1 LANGUAGES CXX)
+project(ConsoleAppKohot VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 
 include(FetchContent)
@@ -12,8 +12,6 @@ FetchContent_Declare(
     BINARY_DIR ${PROJECT_SOURCE_DIR}/build/_deps/${DEPS_LIBRARY}
 )
 FetchContent_MakeAvailable(${DEPS_LIBRARY})
-
-set(POJECT_EXECUTABLE_NAME ConsoleAppKohot)
 
 set(CONSOLE_APP_KOHOT_LIB_SOURCES
 main.cpp
@@ -29,18 +27,18 @@ include/menu.hpp
 include/players_menu.hpp  
 include/user_interaction.hpp  
 )
-add_executable(${POJECT_EXECUTABLE_NAME} ${CONSOLE_APP_KOHOT_LIB_SOURCES})
+add_executable(${PROJECT_NAME} ${CONSOLE_APP_KOHOT_LIB_SOURCES})
 
 link_directories(${CMAKE_SOURCE_DIR}/${DEPS_LIBRARY})
 
-target_compile_options(${POJECT_EXECUTABLE_NAME} PRIVATE
+target_compile_options(${PROJECT_NAME} PRIVATE
 		-Wall
 		)
 
-target_link_libraries(${POJECT_EXECUTABLE_NAME} PRIVATE
+target_link_libraries(${PROJECT_NAME} PRIVATE
     KOHOT_LIB
 )
 
-target_include_directories(${POJECT_EXECUTABLE_NAME} PUBLIC
+target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
